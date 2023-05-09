@@ -48,7 +48,6 @@ Route::post('documentos/store/{reclamo_id}', [App\Http\Controllers\DocumentoCont
 ///////////////////////////////////////////////////
 // ADMINISTRADOR
 ///////////////////////////////////////////////////
-//Route::middleware('auth')->prefix('admin')->group(function () {
 Route::middleware('auth')->prefix('admin')->group(function () {
 	// reclamos
 	

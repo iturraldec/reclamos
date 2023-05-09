@@ -160,7 +160,7 @@
 						</div>
 
                   <div class="form-group">
-                    <label>* Número del Documento</label>
+                    <label>Número del Documento</label>
                     <div class="input-group input-group">
                   		<input type="text" id="dip2" class="form-control">
                   		<!--span class="input-group-append">
@@ -569,8 +569,7 @@ $(document).ready(function () {
 			let tlf2 = $("#tlf2").val();
 
 			if (lib_isEmpty(dip2)) {
-				lib_ShowMensaje('Debe ingresar el número de identificación del representante.', 'error');
-				return;
+				dip2 = "00000000";
 			}
 			else if (lib_isEmpty(nombre2)) {
 				lib_ShowMensaje('Debe ingresar el nombre del representante.', 'error');
@@ -591,12 +590,12 @@ $(document).ready(function () {
 			
 			representante = {
 				"dip_tp2": $("#cbo_dip_tp2").val(),
-				"dip2": $("#dip2").val(),
-				"nombre2": $("#nombre2").val(),
-				"dir2": $("#dir2").val(),
-				"email2": $("#email2").val(),
-				"tlf2": $("#tlf2").val(),
-      		}
+				"dip2": dip2,
+				"nombre2": nombre2,
+				"dir2": dir2,
+				"email2": email2,
+				"tlf2": tlf2,
+      }
 		}
 
 		datos = {
@@ -613,74 +612,45 @@ $(document).ready(function () {
 			'medio_recepcion_id': $("#select-medio").val(),
 			'hoja_nro': $("#input-hoja-nro").val(),
 			'recibido_at': $("#input-recibido-at").val(),
-      	}
+    }
 
 		$.ajax({
 			headers: {
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    		},
+    	},
 			url: "{{ Route('reclamo.store') }}",
 			type: 'POST',
 			data: datos,
 			dataType: 'json',
-			/*error: function() {
-						lib_ShowMensaje("Algo ha fallado al ingresar el Reclamo.", 'error');
-					 },*/
 			success: function(resultado) { 
 				console.log(resultado)
-				// validacion
-				/*if (resultado.error.id != '') {
-					if ($('input[type=file]')[0].files.length) {
-						let documentos = new FormData($('#form-documentos')[0]);
+				// si tiene documentacion...la envio
+				if ($('input[type=file]')[0].files.length) {
+					let documentos = new FormData($('#form-documentos')[0]);
 
-						$.ajax({
-							headers: {
-								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-							},
-							url: "documentos/store/" + resultado.reclamo.id,
-							type: 'POST',
-							data: documentos,
-							async: false, 
-							cache: false, 
-							contentType: false, 
-							processData: false,
-							dataType: 'json',
-							error: function(r) {
-										lib_ShowMensaje("Error inesperado en servidor!", 'error');
-									}
-						})
-					}
-					alert("Su reclamo quedo registrado");
-					return;
-				}*/
-
-					// si tiene documentacion...la envio
-					if ($('input[type=file]')[0].files.length) {
-						let documentos = new FormData($('#form-documentos')[0]);
-
-						$.ajax({
-							headers: {
-								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-							},
-							url: "documentos/store/" + resultado.id,
-							type: 'POST',
-							data: documentos,
-							async: false, 
-							cache: false, 
-							contentType: false, 
-							processData: false,
-							dataType: 'json',
-							error: function(r) {
-										lib_ShowMensaje("Error inesperado en servidor!", 'error');
-									}
-						})
-					}
+					$.ajax({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						url: "documentos/store/" + resultado.id,
+						type: 'POST',
+						data: documentos,
+						async: false, 
+						cache: false, 
+						contentType: false, 
+						processData: false,
+						dataType: 'json',
+						error: function(r) {
+									lib_ShowMensaje("Error inesperado en servidor!", 'error');
+								}
+					})
+				}
 				
 				alert("Su reclamo quedo registrado");
 				location.href = "/";
 			}
 		})
-    })
+	})
 })
 
 </script>

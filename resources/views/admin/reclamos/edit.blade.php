@@ -168,6 +168,12 @@
 						<p>{{ Form::text('traslado-codigo', $reclamo->traslado_codigo, 
 								['id' => 'traslado-codigo', 'class' => 'form-control']) }}</p>
 					</div>
+
+					<div class="col-3">
+						<label for="codigo-primigenio">Código Primigenio</label>
+						<p>{{ Form::text('codigo-primigenio', $reclamo->codigo_primigenio, 
+								['id' => 'codigo-primigenio', 'class' => 'form-control']) }}</p>
+					</div>
 					
 					<div class="col-12">
 						<label for="descripcion">Descripción del Reclamo</label>
@@ -509,8 +515,6 @@ $(document).ready(function () {
 					"width":"15%",
 					"orderable": false,
 					"render": function ( data, type, row, meta ) {
-									//let link_doc = "{{ route('reclamos.file-download', ['documento' => -1]) }}";
-									//let btn_ver = '<a href=' + link_doc.replace('-1', row.id) + ' class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></a>';
 									let link_doc = "{{ url('admin/documentos/download') }}/" + row.id;
 									let btn_ver = '<a href="' + link_doc + '" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></a>';
 									let btn_del = '<button type="button" class="eliminar btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>';
@@ -612,6 +616,21 @@ $(document).ready(function () {
 		$("#traslado").prop("disabled", true);
 		$("#traslado-codigo").prop("disabled", true);
 	}
+
+	// cambio de estado del reclamo
+	$("#estado").change(function() {
+		// se ingresa el codigo primigenio si estado es 'ACUMULADO'
+		console.log($("#estado option:selected").text());
+		let temporal = $("#estado option:selected").html();
+		
+		if (temporal == 'ACUMULADO') {
+			$("#codigo-primigenio").prop("disabled", false);
+		}
+		else {
+			$("#codigo-primigenio").prop("disabled", true);
+			$("#codigo-primigenio").prop("value", "");
+		}
+	});
 
 	// medidas adoptadas activa si resultado del reclamo es FUNDADO ó FUNDADO PARCIAL
 	if (($("#resultado option:selected").html() != 'FUNDADO') &&
@@ -744,6 +763,7 @@ $(document).ready(function () {
 			"ma_procesoo": $("#ma-procesoo").val(),
 			"observacionr": $("#observacionr").val(),
 			"usrs_involucrados": $("#usrs-involucrados").val(),
+			"codigo_primigenio": $("#codigo-primigenio").val()
 		}
 
 		$.ajax({
