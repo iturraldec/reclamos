@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-<!-- datos del paciente -->
+<!-- DATOS DEL PACIENTE -->
 <div class="row ">
 	<div class="col-12">
 		<div class="card card-primary">
@@ -70,7 +70,7 @@
 	</div>
 </div>
 
-<!-- datos del representante -->
+<!-- DATOS DEL REPRESENTANTE -->
 <div class="row">
 	<div class="col-12">
 		<div class="card card-primary">
@@ -116,7 +116,7 @@
 	</div>
 </div>
 
-<!-- gestion del reclamo -->
+<!-- GESTION DEL RECLAMO -->
 <div class="row">
 	<div class="col-12">
 		<div class="card card-primary">
@@ -175,7 +175,22 @@
 								['id' => 'codigo-primigenio', 'class' => 'form-control']) }}</p>
 					</div>
 					
-					<div class="col-12">
+					<div class="col-3">
+						<label for="clinica_atiende">Clinica Atiende?</label>
+						<p>
+							@php
+								$atiende = array(
+									'SI' => 'SI',
+									'NO' => 'NO',
+									'COMPARTIDA' => 'COMPARTIDA'
+								);
+							@endphp
+
+							{{Form::select('estado', $atiende, $reclamo->clinica_atiende, 
+								['id' => 'clinica-atiende', 'class' => 'form-control']) }}</p>
+					</div>
+
+					<div class="col-9">
 						<label for="descripcion">Descripción del Reclamo</label>
 						<p>{{ Form::textarea('descripcion', $reclamo->descripcion, 
 								['class' => 'form-control', 'rows' => '3', 'readonly']) }}</p>
@@ -763,7 +778,8 @@ $(document).ready(function () {
 			"ma_procesoo": $("#ma-procesoo").val(),
 			"observacionr": $("#observacionr").val(),
 			"usrs_involucrados": $("#usrs-involucrados").val(),
-			"codigo_primigenio": $("#codigo-primigenio").val()
+			"codigo_primigenio": $("#codigo-primigenio").val(),
+			"clinica_atiende": $("#clinica-atiende").val()
 		}
 
 		$.ajax({

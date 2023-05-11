@@ -18,7 +18,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'rol', 'dip_tp', 'dip', 'password', 'name', 'domicilio', 'email', 'telefono',
-		  'codigo_historia'
+		  'codigo_historia', 'apellido_paterno', 'apellido_materno'
     ];
 
     /**

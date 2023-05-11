@@ -91,12 +91,14 @@ class ReclamoController extends Controller {
 				$datos['hoja_nro'] = '';
 			}
 
-			$use = array(
+			$user1 = array(
 				'dip' => $datos['dip1'],
 				'rol' => 'Guest',
 				'dip_tp' => $datos['dip_tp1'],   
 				'password' => md5($datos['dip1']),
 				'name' => $datos['nombre1'],
+				'apellido_paterno' => $datos['apellido_paterno1'],
+				'apellido_materno' => $datos['apellido_materno1'],
 				'domicilio' => $datos['dir1'],
 				'email' => $datos['email1'],
 				'telefono' => $datos['tlf1'],
@@ -105,7 +107,7 @@ class ReclamoController extends Controller {
 			try {
 				$veri_email = User::where('email',$datos['email1'])->get();
 				if (json_encode($veri_email) == '[]') {
-					$usuario = User::firstOrCreate($use);
+					$usuario = User::firstOrCreate($user1);
 					$reclamo = array(
 						'user_id' => $usuario['id'],
 						'descripcion' => $datos['reclamo'],
@@ -118,17 +120,19 @@ class ReclamoController extends Controller {
 						'resuelto_at' => null
 					);
 					if($datos['representante']){
-						$use2 = array(			
+						$user2 = array(			
 							'dip' => $datos['representante']['dip2'],
 							'rol' => 'Guest',
 							'dip_tp' => $datos['representante']['dip_tp2'],   
 							'password' => md5($datos['representante']['dip2']),
 							'name' => $datos['representante']['nombre2'],
+							'apellido_paterno' => $datos['representante']['apellido_paterno2'],
+							'apellido_materno' => $datos['representante']['apellido_materno2'],
 							'domicilio' => $datos['representante']['dir2'],
 							'email' => $datos['representante']['email2'],
 							'telefono' => $datos['representante']['tlf2']		
 						);
-						$resp = User::firstOrCreate($use2);
+						$resp = User::firstOrCreate($user2);
 						$reclamo['user2_id'] = $resp['id'];
 					}
 
@@ -140,7 +144,8 @@ class ReclamoController extends Controller {
 
 					return response()->json($reclamo, 200);
 				
-				}else{
+				}
+				else {
 					$reclamo = array(
 						'user_id' => $veri_email[0]['id'],
 						'descripcion' => $datos['reclamo'],
@@ -153,17 +158,19 @@ class ReclamoController extends Controller {
 						'resuelto_at' => null
 					);
 					if($datos['representante']){
-						$use2 = array(			
+						$user2 = array(			
 							'dip' => $datos['representante']['dip2'],
 							'rol' => 'Guest',
 							'dip_tp' => $datos['representante']['dip_tp2'],   
 							'password' => md5($datos['representante']['dip2']),
 							'name' => $datos['representante']['nombre2'],
+							'apellido_paterno' => $datos['representante']['apellido_paterno2'],
+							'apellido_materno' => $datos['representante']['apellido_materno2'],
 							'domicilio' => $datos['representante']['dir2'],
 							'email' => $datos['representante']['email2'],
 							'telefono' => $datos['representante']['tlf2']		
 						);
-						$resp = User::firstOrCreate($use2);
+						$resp = User::firstOrCreate($user2);
 						$reclamo['user2_id'] = $resp['id'];
 					}
 					$reclamo = Reclamo::Create($reclamo);
@@ -172,7 +179,6 @@ class ReclamoController extends Controller {
 						$reclamo->save();      	
 					}
 					return response()->json($reclamo, 200);
-					//return response()->json(['error' => $veri_email[0], 'reclamo' =>$reclamo], 200);
 				}
 			} catch (Exception $e) {
 				
@@ -282,6 +288,7 @@ class ReclamoController extends Controller {
 		$reclamo->ma_inicio = $request->ma_inicio;
 		$reclamo->ma_fin = $request->ma_fin;
 		$reclamo->codigo_primigenio = $request->codigo_primigenio;
+		$reclamo->clinica_atiende = $request->clinica_atiende;
 		if ($request->ma_tipo != 'NULL')
 			$reclamo->ma_tipo = $request->ma_tipo;
 		if ($request->ma_proceso != 'NULL')

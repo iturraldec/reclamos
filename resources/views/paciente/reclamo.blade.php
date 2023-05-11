@@ -16,16 +16,16 @@
 	 <title>Clinica de Especialidades Médicas | Formulario de Reclamo</title>
 
 	</head>
-  <body>
-
-	<!-- encabezado -->
-		
+  <body>	
     
 	 <main role="main" class="container">
-		<div class="row my-3 justify-content-center">
+
+	 <!-- encabezado -->
+	 <div class="row my-3">
 			<div class="col-10">
-				<img src="assets/images/Banner principal_Hoja_de_reclamos-03.jpg" class="img-fluid" >
+				<img src="assets/images/Banner principal_Hoja_de_reclamos-03.jpg" class="img-fluid">
 			</div>
+			<a href="login">Login</a>
 		</div>
 
 		<!-- datos del reclamo -->
@@ -68,6 +68,7 @@
                 <!-- /.card-body -->
             </div>
 			</div>
+			</div>
 		</div>
 		<!-- /.card datos del paciente-->
 
@@ -95,21 +96,39 @@
 							</select>                  
 						</div>
 
-                  <div class="form-group">
-                    <label>* Número del Documento</label>
-                    <div class="input-group input-group">
-                  		<input type="text" id="dip1" class="form-control"  required>
-                  		<!--span class="input-group-append">
-                    			<button type="button" id="btn_buscar1" class="btn btn-info btn-flat">Buscar</button>
-                  		</span-->
-                		</div>
-                  </div>
-                  
 						<div class="form-group">
-							<label>* Nombre o Razón Social</label>
-							<input type="text" id="nombre1" class="form-control" readonly required>
+							<label>* Número del Documento</label>
+							<div class="input-group input-group">
+								<input type="text" id="dip1" class="form-control"  required>
+								<!--span class="input-group-append">
+										<button type="button" id="btn_buscar1" class="btn btn-info btn-flat">Buscar</button>
+								</span-->
+							</div>
 						</div>
+            
+						<div class="row">
+							<div class="col-4">
+								<div class="form-group">
+									<label>* Nombres</label>
+									<input type="text" id="nombre1" class="form-control" readonly required>
+								</div>
+							</div>
 
+							<div class="col-4">
+								<div class="form-group">
+									<label>* Apellido Paterno</label>
+									<input type="text" id="apellido-paterno1" class="form-control" readonly required>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="form-group">
+									<label>Apellido Materno</label>
+									<input type="text" id="apellido-materno1" class="form-control" readonly required>
+								</div>
+							</div>
+						</div>
+						
 						<div class="form-group">
 							<label>* Domicilio</label>
 							<textarea id="dir1" class="form-control" required></textarea>
@@ -159,19 +178,37 @@
 							</select>                  
 						</div>
 
-                  <div class="form-group">
-                    <label>Número del Documento</label>
-                    <div class="input-group input-group">
-                  		<input type="text" id="dip2" class="form-control">
-                  		<!--span class="input-group-append">
-                    			<button type="button" id="btn_buscar2" class="btn btn-info btn-flat">Buscar</button>
-                  		</span-->
-                		</div>
-                  </div>
-                  
 						<div class="form-group">
-							<label>* Nombre o Razón Social</label>
-							<input type="text" id="nombre2" class="form-control" readonly>
+							<label>Número del Documento</label>
+							<div class="input-group input-group">
+								<input type="text" id="dip2" class="form-control">
+								<!--span class="input-group-append">
+										<button type="button" id="btn_buscar2" class="btn btn-info btn-flat">Buscar</button>
+								</span-->
+							</div>
+						</div>
+                  
+						<div class="row">
+							<div class="col-4">
+								<div class="form-group">
+									<label>* Nombres</label>
+									<input type="text" id="nombre2" class="form-control" readonly required>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="form-group">
+									<label>* Apellido Paterno</label>
+									<input type="text" id="apellido-paterno2" class="form-control" readonly required>
+								</div>
+							</div>
+
+							<div class="col-4">
+								<div class="form-group">
+									<label>Apellido Materno</label>
+									<input type="text" id="apellido-materno2" class="form-control" readonly required>
+								</div>
+							</div>
 						</div>
 
 						<div class="form-group">
@@ -359,10 +396,14 @@ $(document).ready(function () {
 	// al seleccionar el tipo de documento del paciente
 	$("#cbo_dip_tp1").change(function(){
 		$("#nombre1").attr('readonly', false);
+		$("#apellido-paterno1").attr('readonly', false);
+		$("#apellido-materno1").attr('readonly', false);
 		$("#dir1").attr('readonly', false);
 		$("#btn_buscar1").attr("disabled", false);
 		if($(this).val() == DNI || $(this).val() == RUC) {
 			$("#nombre1").attr('readonly', true);
+			$("#apellido-paterno1").attr('readonly', true);
+			$("#apellido-materno1").attr('readonly', true);
 			if($(this).val() == RUC){
 				$("#dir1").attr("readonly", true);
 			}
@@ -375,10 +416,14 @@ $(document).ready(function () {
 	// al seleccionar el tipo de documento del representante
 	$("#cbo_dip_tp2").change(function(){
 		$("#nombre2").attr('readonly', false);
+		$("#apellido-paterno2").attr('readonly', false);
+		$("#apellido-materno2").attr('readonly', false);
 		$("#dir2").attr('readonly', false);
 		$("#btn_buscar2").attr("disabled", false);
 		if($(this).val() == DNI || $(this).val() == RUC) {
 			$("#nombre2").attr('readonly', true);
+			$("#apellido-paterno2").attr('readonly', true);
+			$("#apellido-materno2").attr('readonly', true);
 			if($(this).val() == RUC){
 				$("#dir2").attr('readonly', true);
 			}
@@ -408,10 +453,14 @@ $(document).ready(function () {
 				dataType: 'json',
 				success: function(data) {
 								if(data.success){
-									$("#nombre1").val(data.data.nombre_completo);
+									$("#nombre1").val(data.data.nombres);
+									$("#apellido-paterno1").val(data.data.apellido_paterno);
+									$("#apellido-materno1").val(data.data.apellido_materno);
 								}
 								else{
 									$("#nombre1").val('');
+									$("#apellido-paterno1").val('');
+									$("#apellido-materno1").val('');
 										//lib_ShowMensaje("DNI no valido.", 'error');
 								}
 							},
@@ -432,10 +481,14 @@ $(document).ready(function () {
 				success: function(data) {
 								if(data.success){
 									$("#nombre1").val(data.data.nombre_o_razon_social);
+									$("#apellido-paterno1").val('');
+									$("#apellido-materno1").val('');
 									$("#dir1").val(data.data.direccion_completa);
 								}
 								else{
 									$("#nombre1").val('');
+									$("#apellido-paterno1").val('');
+									$("#apellido-materno1").val('');
 									//lib_ShowMensaje("RUC no valido.", 'error');
 								}
 							},
@@ -444,12 +497,12 @@ $(document).ready(function () {
 						}
 			})
       }
-   })
-
+  })
+	
 	// usuario que entrega el reclamo
 	$("#cbo_autorizado").change(function(){
       refresh_representante();
-   })
+  })
 
 	// busqueda de dip del representante
 	$("#dip2").keyup(function() {
@@ -471,10 +524,14 @@ $(document).ready(function () {
 				dataType: 'json',
 				success: function(data) {
 								if(data.success){
-									$("#nombre2").val(data.data.nombre_completo);
+									$("#nombre2").val(data.data.nombres);
+									$("#apellido-paterno2").val(data.data.apellido_paterno);
+									$("#apellido-materno2").val(data.data.apellido_materno);
 								}
 								else{
 									$("#nombre2").val('');
+									$("#apellido-paterno2").val('');
+									$("#apellido-materno2").val('');
 									//lib_ShowMensaje("DNI no valido.", 'error');
 								}
 							},
@@ -495,10 +552,14 @@ $(document).ready(function () {
 				success: function(data) {
 								if(data.success){
 									$("#nombre2").val(data.data.nombre_o_razon_social);
+									$("#apellido-paterno2").val('');
+									$("#apellido-materno2").val('');
 									$("#dir2").val(data.data.direccion_completa);
 								}
 								else{
 									$("#nombre2").val('');
+									$("#apellido-paterno2").val('');
+									$("#apellido-materno2").val('');
 									//lib_ShowMensaje("RUC no valido.",'error');
 								}
 							},
@@ -521,13 +582,15 @@ $(document).ready(function () {
 	$("#enviar").click(function() {
 		if(! $("#chk_declaro").prop('checked') || ! $("#chk_acepto").prop('checked')) {
 			lib_ShowMensaje('Debe aceptar los terminos y condiciones.', 'error');
-			//return;
+			return;
 		}
 
 		let representante = null;
 		let datos = null;
 		let dip1 = $("#dip1").val();
 		let nombre1 = $("#nombre1").val();
+		let apellido_paterno1 = $("#apellido-paterno1").val();
+		let apellido_materno1 = $("#apellido-materno1").val();
 		let dir1 = $("#dir1").val();
 		let email1 = $("#email1").val();
 		let tlf1 = $("#tlf1").val();
@@ -540,6 +603,10 @@ $(document).ready(function () {
 			return;
 		}
 		else if (lib_isEmpty(nombre1)) {
+			lib_ShowMensaje('Debe ingresar su nombre.', 'error');
+			return;
+		}
+		else if (lib_isEmpty(apellido_paterno1)) {
 			lib_ShowMensaje('Debe ingresar su nombre.', 'error');
 			return;
 		}
@@ -564,6 +631,8 @@ $(document).ready(function () {
 		if($("#cbo_autorizado").val() == 'No') {
 			let dip2 = $("#dip2").val();
 			let nombre2 = $("#nombre2").val();
+			let apellido_paterno2 = $("#apellido-paterno2").val();
+			let apellido_materno2 = $("#apellido-materno2").val();
 			let dir2 = $("#dir2").val();
 			let email2 = $("#email2").val();
 			let tlf2 = $("#tlf2").val();
@@ -592,6 +661,8 @@ $(document).ready(function () {
 				"dip_tp2": $("#cbo_dip_tp2").val(),
 				"dip2": dip2,
 				"nombre2": nombre2,
+				"apellido_paterno2": apellido_paterno2,
+				"apellido_materno2": apellido_materno2,
 				"dir2": dir2,
 				"email2": email2,
 				"tlf2": tlf2,
@@ -602,6 +673,8 @@ $(document).ready(function () {
 			"dip_tp1": $("#cbo_dip_tp1").val(),
 			"dip1": dip1,
 			"nombre1": $("#nombre1").val(),
+			"apellido_paterno1": apellido_paterno1,
+			"apellido_materno1": apellido_materno1,
 			"dir1": $("#dir1").val(),
 			"email1": $("#email1").val(),
 			"tlf1": $("#tlf1").val(),
@@ -623,7 +696,6 @@ $(document).ready(function () {
 			data: datos,
 			dataType: 'json',
 			success: function(resultado) { 
-				console.log(resultado)
 				// si tiene documentacion...la envio
 				if ($('input[type=file]')[0].files.length) {
 					let documentos = new FormData($('#form-documentos')[0]);

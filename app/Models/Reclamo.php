@@ -14,7 +14,7 @@ class Reclamo extends Model
 		  'medio_recepcion_id', 'hoja_nro', 'administrado_tp', 'codigo_reipress', 
 		  'recibido_at', 'paciente_tp', 'iafas_id', 'etapa_id', 'resultado_id', 
 		  'notificacion_id', 'notificacion_at', 'conclusiona_id', 'delete_at',
-		  'ma_estado', 'ma_inicio', 'ma_fin', 'codigo_primigenio'
+		  'ma_estado', 'ma_inicio', 'ma_fin', 'codigo_primigenio', 'clinica_atiende'
     ];
 
 	 //
