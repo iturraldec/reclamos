@@ -497,6 +497,44 @@
 	</div>
 </form>
 
+<!-- TRAMAS -->
+<div class="row">
+	<div class="col-12">
+		<div class="card card-primary">
+			<div class="card-header">
+				8. Generación de Trama
+			</div>
+
+			<div class="card-body">
+				<div class="row">		
+					<div class="col-4">
+						<?php 
+							$reporte_estado['1'] = 'SI';
+							$reporte_estado['2'] = 'NO';
+							$reporte_estado['3'] = 'POR CULMINAR';
+						?>
+						<label for="reporte-estado">Estado</label>
+						<p>{{ Form::select('reporte_estado', 
+									$reporte_estado, 
+									$reclamo->reporte_estado, 
+									['id' => 'reporte-estado', 'class' => 'form-control'])
+								}}
+						</p>
+					</div>
+
+					<div class="col-8">
+						<label for="reporte-observacion">Observación</label>
+						<p>{{ Form::textarea('reporte-observacion', 
+								$reclamo->reporte_observacion, 
+								['id'=>'reporte-observacion','class'=>'form-control','rows'=>'3']) 
+							}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- PIE DE PAGINA -->
 <footer class="row text-center">
 	<div class="col-12">
@@ -779,7 +817,9 @@ $(document).ready(function () {
 			"observacionr": $("#observacionr").val(),
 			"usrs_involucrados": $("#usrs-involucrados").val(),
 			"codigo_primigenio": $("#codigo-primigenio").val(),
-			"clinica_atiende": $("#clinica-atiende").val()
+			"clinica_atiende": $("#clinica-atiende").val(),
+			"reporte_estado": $("#reporte-estado").val(),
+			"reporte_observacion": $("#reporte-observacion").val(),
 		}
 
 		$.ajax({

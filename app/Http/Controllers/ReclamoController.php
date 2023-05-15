@@ -193,29 +193,29 @@ class ReclamoController extends Controller {
      */
     public function show(Reclamo $reclamo)
     {
-		$representante = User::find($reclamo->user2_id);
-		$datos = new Tipo();
-		$tipos = $datos->getTipoArray();
-		$causas = new Causa();
-		$datos = new Origen();
-		$origenes = $datos->getTipoArray();
-		$datos = new Estado();
-		$estados = $datos->getTipoArray();
-		$datos = new IAFAS();
-		$iafas = $datos->getTipoArray();
-		$datos = new Etapa();
-		$etapas = $datos->getTipoArray();
-		$datos = new Traslado();
-		$traslados = $datos->getTipoArray();
-		$datos = new Resultado();
-		$resultados = $datos->getTipoArray();
-		$datos = new ConclusionAnticipada();
-		$conclusiones_anticipadas = $datos->getTipoArray();
-		$datos = new EnvioResultado();
-		$notificaciones = $datos->getTipoArray();
-		return view('admin.reclamos.show', compact('reclamo', 'representante', 'tipos', 
-			'causas', 'origenes', 'estados', 'iafas', 'etapas', 'traslados', 'resultados', 
-			'conclusiones_anticipadas', 'notificaciones'));
+			$representante = User::find($reclamo->user2_id);
+			$datos = new Tipo();
+			$tipos = $datos->getTipoArray();
+			$causas = new Causa();
+			$datos = new Origen();
+			$origenes = $datos->getTipoArray();
+			$datos = new Estado();
+			$estados = $datos->getTipoArray();
+			$datos = new IAFAS();
+			$iafas = $datos->getTipoArray();
+			$datos = new Etapa();
+			$etapas = $datos->getTipoArray();
+			$datos = new Traslado();
+			$traslados = $datos->getTipoArray();
+			$datos = new Resultado();
+			$resultados = $datos->getTipoArray();
+			$datos = new ConclusionAnticipada();
+			$conclusiones_anticipadas = $datos->getTipoArray();
+			$datos = new EnvioResultado();
+			$notificaciones = $datos->getTipoArray();
+			return view('admin.reclamos.show', compact('reclamo', 'representante', 'tipos', 
+				'causas', 'origenes', 'estados', 'iafas', 'etapas', 'traslados', 'resultados', 
+				'conclusiones_anticipadas', 'notificaciones'));
     }
 
     /**
@@ -226,30 +226,30 @@ class ReclamoController extends Controller {
      */
     public function edit(Reclamo $reclamo)
     {
-		$representante = User::find($reclamo->user2_id);
-		$datos = new Tipo();
-		$tipos = $datos->getTipoArray();
-		$datos = new Causa();
-		$causas = $datos->getTipoArray();
-		$datos = new Origen();
-		$origenes = $datos->getTipoArray();
-		$datos = new Estado();
-		$estados = $datos->getTipoArray();
-		$datos = new IAFAS();
-		$iafas = $datos->getTipoArray();
-		$datos = new Etapa();
-		$etapas = $datos->getTipoArray();
-		$datos = new Traslado();
-		$traslados = $datos->getTipoArray();
-		$datos = new Resultado();
-		$resultados = $datos->getTipoArray();
-		$datos = new ConclusionAnticipada();
-		$conclusiones_anticipadas = $datos->getTipoArray();
-		$datos = new EnvioResultado();
-		$notificaciones = $datos->getTipoArray();
-		return view('admin.reclamos.edit', compact('reclamo', 'representante', 'tipos', 
-			'causas', 'origenes', 'estados', 'iafas', 'etapas', 'traslados', 'resultados', 
-			'conclusiones_anticipadas', 'notificaciones'));
+			$representante = User::find($reclamo->user2_id);
+			$datos = new Tipo();
+			$tipos = $datos->getTipoArray();
+			$datos = new Causa();
+			$causas = $datos->getTipoArray();
+			$datos = new Origen();
+			$origenes = $datos->getTipoArray();
+			$datos = new Estado();
+			$estados = $datos->getTipoArray();
+			$datos = new IAFAS();
+			$iafas = $datos->getTipoArray();
+			$datos = new Etapa();
+			$etapas = $datos->getTipoArray();
+			$datos = new Traslado();
+			$traslados = $datos->getTipoArray();
+			$datos = new Resultado();
+			$resultados = $datos->getTipoArray();
+			$datos = new ConclusionAnticipada();
+			$conclusiones_anticipadas = $datos->getTipoArray();
+			$datos = new EnvioResultado();
+			$notificaciones = $datos->getTipoArray();
+			return view('admin.reclamos.edit', compact('reclamo', 'representante', 'tipos', 
+				'causas', 'origenes', 'estados', 'iafas', 'etapas', 'traslados', 'resultados', 
+				'conclusiones_anticipadas', 'notificaciones'));
     }
 
     /**
@@ -261,59 +261,61 @@ class ReclamoController extends Controller {
      */
     public function update(Request $request, Reclamo $reclamo)
     {
-		// grabo la historia medica del usuario
-		$usuario = User::find($reclamo->user_id);
-		$usuario->codigo_historia = $request->codigo_historia;
-		$usuario->save();
+			// grabo la historia medica del usuario
+			$usuario = User::find($reclamo->user_id);
+			$usuario->codigo_historia = $request->codigo_historia;
+			$usuario->save();
 
-		//
-		$reclamo->analisis = $request->analisis;
-		$reclamo->causa_id = $request->causa_id;
-		$reclamo->conclusion = $request->conclusion;
-		$reclamo->conclusiona_id = $request->conclusiona_id;
-		$reclamo->estado_id = $request->estado_id;
-		$reclamo->etapa_id = $request->etapa_id;
-		$reclamo->iafas_id = $request->iafas_id;
-		$reclamo->medidas_adoptadas = $request->medidas_adoptadas;
-		$reclamo->origen_id = $request->origen_id;
-		$reclamo->paciente_tp = $request->paciente_tp;
-		$reclamo->recibido_at = $request->recibido_at;
-		$reclamo->resuelto_at = $request->resuelto_at;
-		$reclamo->resultado_id = $request->resultado_id;
-		$reclamo->suceso_at = $request->suceso_at;
-		$reclamo->tipo_id = $request->tipo_id;
-		$reclamo->traslado_codigo = $request->traslado_codigo;
-		$reclamo->traslado_id = $request->traslado_id;
-		$reclamo->ma_estado = $request->ma_estado;
-		$reclamo->ma_inicio = $request->ma_inicio;
-		$reclamo->ma_fin = $request->ma_fin;
-		$reclamo->codigo_primigenio = $request->codigo_primigenio;
-		$reclamo->clinica_atiende = $request->clinica_atiende;
-		if ($request->ma_tipo != 'NULL')
-			$reclamo->ma_tipo = $request->ma_tipo;
-		if ($request->ma_proceso != 'NULL')
-			$reclamo->ma_proceso = $request->ma_proceso;
-		if ($request->ma_proceso2 != 'NULL')
-			$reclamo->ma_proceso2 = $request->ma_proceso2;
-		$reclamo->ma_procesoo = $request->ma_procesoo;
-		$reclamo->observacionr = $request->observacionr;
-		$reclamo->usrs_involucrados = $request->usrs_involucrados;
+			//
+			$reclamo->analisis = $request->analisis;
+			$reclamo->causa_id = $request->causa_id;
+			$reclamo->conclusion = $request->conclusion;
+			$reclamo->conclusiona_id = $request->conclusiona_id;
+			$reclamo->estado_id = $request->estado_id;
+			$reclamo->etapa_id = $request->etapa_id;
+			$reclamo->iafas_id = $request->iafas_id;
+			$reclamo->medidas_adoptadas = $request->medidas_adoptadas;
+			$reclamo->origen_id = $request->origen_id;
+			$reclamo->paciente_tp = $request->paciente_tp;
+			$reclamo->recibido_at = $request->recibido_at;
+			$reclamo->resuelto_at = $request->resuelto_at;
+			$reclamo->resultado_id = $request->resultado_id;
+			$reclamo->suceso_at = $request->suceso_at;
+			$reclamo->tipo_id = $request->tipo_id;
+			$reclamo->traslado_codigo = $request->traslado_codigo;
+			$reclamo->traslado_id = $request->traslado_id;
+			$reclamo->ma_estado = $request->ma_estado;
+			$reclamo->ma_inicio = $request->ma_inicio;
+			$reclamo->ma_fin = $request->ma_fin;
+			$reclamo->codigo_primigenio = $request->codigo_primigenio;
+			$reclamo->clinica_atiende = $request->clinica_atiende;
+			$reclamo->reporte_estado = $request->reporte_estado;
+			$reclamo->reporte_observacion = $request->reporte_observacion;
+			if ($request->ma_tipo != 'NULL')
+				$reclamo->ma_tipo = $request->ma_tipo;
+			if ($request->ma_proceso != 'NULL')
+				$reclamo->ma_proceso = $request->ma_proceso;
+			if ($request->ma_proceso2 != 'NULL')
+				$reclamo->ma_proceso2 = $request->ma_proceso2;
+			$reclamo->ma_procesoo = $request->ma_procesoo;
+			$reclamo->observacionr = $request->observacionr;
+			$reclamo->usrs_involucrados = $request->usrs_involucrados;
 
-		// si el resultado del reclamo es: CONCLUIDO ANTICIPADAMENTE
-		// notificacion_id y notificacion_at, son NULL
-		if ( $request->resultado_id == 6) {
-			$reclamo->notificacion_id = NULL;
-			$reclamo->notificacion_at = NULL;
-		}
-		else {
-			$reclamo->notificacion_id = $request->notificacion_id;
-			$reclamo->notificacion_at = $request->notificacion_at;
-		}
-		
-		$reclamo->save();
-		$r["success"] = 'ok';
-		$r["msg"] = 'Reclamo actualizado.';
-		return response()->json($r, 200);
+			// si el resultado del reclamo es: CONCLUIDO ANTICIPADAMENTE
+			// notificacion_id y notificacion_at, son NULL
+			if ( $request->resultado_id == 6) {
+				$reclamo->notificacion_id = NULL;
+				$reclamo->notificacion_at = NULL;
+			}
+			else {
+				$reclamo->notificacion_id = $request->notificacion_id;
+				$reclamo->notificacion_at = $request->notificacion_at;
+			}
+			
+			$reclamo->save();
+			$r["success"] = 'ok';
+			$r["msg"] = 'Reclamo actualizado.';
+			return response()->json($r, 200);
     }
 
 	 /**

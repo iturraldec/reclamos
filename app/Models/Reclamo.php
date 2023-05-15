@@ -14,7 +14,8 @@ class Reclamo extends Model
 		  'medio_recepcion_id', 'hoja_nro', 'administrado_tp', 'codigo_reipress', 
 		  'recibido_at', 'paciente_tp', 'iafas_id', 'etapa_id', 'resultado_id', 
 		  'notificacion_id', 'notificacion_at', 'conclusiona_id', 'delete_at',
-		  'ma_estado', 'ma_inicio', 'ma_fin', 'codigo_primigenio', 'clinica_atiende'
+		  'ma_estado', 'ma_inicio', 'ma_fin', 'codigo_primigenio', 'clinica_atiende', 'reporte_estado',
+			'reporte_periodo', 'reporte_observacion'
     ];
 
 	 //
@@ -27,14 +28,6 @@ class Reclamo extends Model
      */
     public function getRespuestaAtAttribute()
     {
-      /*
-			FORMA ANTERIOR
-
-			$recibido = $this->attributes['recibido_at'];
-				$dias = $this->attributes['dias_max_resp'];
-			return date('Y-m-d', strtotime ("+ $dias day", strtotime($recibido)));
-			*/
-
 			if (! is_null($this->attributes['resuelto_at'])) {
 				return null;
 			}

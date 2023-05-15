@@ -338,6 +338,7 @@
 $(document).ready(function () {
 	const DNI = "DNI";
 	const RUC = "RUC";
+	const APP_UTL = "{{ env('APP_URL') }}";
 
 	// configuro la carga de archivos
 	$('#input-file').MultiFile({
@@ -719,7 +720,7 @@ $(document).ready(function () {
 				}
 				
 				alert("Su reclamo quedo registrado");
-				location.href = "/";
+				location.href = APP_URL;
 			}
 		})
 	})
