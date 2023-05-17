@@ -242,19 +242,18 @@ return [
             'icon'    => 'fas fa-fw fa-share',
             'url'  => '/admin/reclamos/dashboard',
         ],
+
         [
-            'text' => 'Listado',
+            'text' => 'Listado de Reclamos',
             'url'  => '/admin/reclamos',
             'icon' => 'fas fa-file',
         ],
+
         [
             'text' => 'Tramas de reclamos',
             'url'  => '/admin/reclamos/tramas',
         ],
-        [
-            'text' => 'Tramas adoptadas',
-            'url'  => '/admin/reclamos/tramasadop',
-        ],
+
         ['header' => 'MENÚ DEL ADMINISTRADOR'],
 		  [
 			'text'    => 'RECLAMOS',

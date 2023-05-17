@@ -30,23 +30,24 @@ class ReclamoController extends Controller {
      */
     public function index()
     {
-		$reclamos = Reclamo::paginate(15);
-		return view('admin.reclamos.index', compact("reclamos"));
+			$reclamos = Reclamo::paginate(15);
+			return view('admin.reclamos.index', compact("reclamos"));
     }
 
 	 // carga los reclamos
 	 public function load_data()
     {
-		$reclamos = Reclamo::with('user')
-							->with('estado')
-							->where('delete_at', '=', NULL)
-							->get();
-		return datatables()->of($reclamos)->toJson();
+			$reclamos = Reclamo::with('user')
+								->with('estado')
+								->where('delete_at', '=', NULL)
+								->get();
+			return datatables()->of($reclamos)->toJson();
     }
 
-	 // dashboard de la app
-	 public function dashboard()
-	 {
+	 
+	// dashboard de la app
+	public function dashboard()
+	{
 		// conteo de reclamos por tipo
 		$tipos = DB::select('SELECT * FROM v_count_tipos');
 
@@ -444,54 +445,89 @@ class ReclamoController extends Controller {
     }
 
 	/*
-		Generar las tramas de los reclamos.
+		Generar las tramas.
 
-		Ultima modificacion: 23/06/2022
+		Ultima modificacion: 17/05/2023
 	*/
 
 	public function tramas(Request $request)
 	{
-		$limite = $request->all();
-		if (empty($limite)) {
+		$param = $request->all();
+		if (empty($param)) {
 			return view('admin.reclamos.tramas');
 		}
 		else {
-			//$tramas = DB::select("SELECT * FROM v_tramas");
-			//return $request->desde;
-			//$desde = date($request->desde, 'Ym');
-			$fechaComoEntero = strtotime($request->desde);
-			$fechaComoEntero2 = strtotime($request->hasta);
-			$desde = date("Ym", $fechaComoEntero);
-			$hasta = date('Ym', $fechaComoEntero2);
-			
-			$tramas = DB::table("v_tramas_test")
-			->where('col_a','>=',$desde)
-			->where('col_a','<=',$hasta)
-			->get();
-
-			//return $tramas;
-			// Open a file in write mode ('w')
-			$filePath = storage_path('app/tramas_reclamos.csv');
-			$fp = fopen($filePath, 'w');
-			  
-			// cabecera
-			$cabecera = array(
-				'id', 'PERIODO DE DECLARACION', 'TIPO DE ADMINISTRADO DECLARANTE', 'CODIGO ADMINISTRATIVO DECLARANTE', 'CODIGO UGIPRESS', 'TIPO DE INSTITUCION RECLAMO', 'CODIGO ADMINISTRATIVO RECLAMO', 'MEDIO PRESENTACION RECLAMO', 'CODIGO UNICO REGISTRO RECLAMO', 'TIPO DOCUMENTO USUARIO AFECTADO', 'DNI', 'RAZON SOCIAL', 'NOMBRES APELLIDO PATERNO APELLIDO MATERNO', 'DOCUMENTO IDENTIDAD QUIEN PRESENTA RECLAMO', 'DNI QUIEN PRESENTA RECLAMO', 'RAZON SOCIAL', 'NOMBRES APELLIDO PATERNO APELLIDO MATERNO', 'AUTORIZACION CORREO', 'CORREO', 'DOMICILIO', 'CELULAR', 'RECEPCION RECLAMO', 'FECHA RECLAMO', 'DETALLE RECLAMO', 'TIPO DE SERVICIO', 'COMPETENCIA RECLAMO', 'CLASIFICACION 1', 'CLASIFICACION 2', 'CLASIFICACION 3', 'ESTADO RECLAMO', 'CODIGO RECLAMO PRIMIGENIO', 'ETAPA RECLAMO', 'TIPO DE ADMINISTRADO', 'CODIGO DEL ADMINISTRADO', 'RESULTADO RECLAMO', 'MOTIVO CONCLUSION', 'FECHA RESULTADO', 'COMUNICACION DEL RESULTADO', 'FECHA DE NOTIFICACION DE RESULTADO'
-			);
-			fputcsv($fp, (array) $cabecera, ";");
-
-			// Loop through file pointer and a line
-			foreach ($tramas as $trama) {
-				fputcsv($fp, (array) $trama, ";");
+			if($param['tipo'] == '1') {
+				return $this->_tramaDeReclamos($param['periodo'], $param['desde'], $param['hasta']);
 			}
-			fclose($fp);
-
-			$headers = ['Content-Type: text/csv'];
-			$fileName = time().'.csv';
-			return response()->download($filePath, $fileName, $headers);
 		}
 	}
 
+	// trama de reclamos
+	private function _tramaDeReclamos($periodo, $desde, $hasta)
+	{
+		$filas = DB::select("CALL TramaDeReclamos(?, ?, ?)", array($periodo, $desde, $hasta));
+			
+		// Open a file in write mode ('w')
+		$filePath = storage_path('app/trama_reclamos.csv');
+		$fp = fopen($filePath, 'w');
+			
+		// cabecera
+		$cabecera = array(
+			'id', 
+			'PERIODO DE DECLARACION', 
+			'TIPO DE ADMINISTRADO DECLARANTE', 
+			'CODIGO ADMINISTRATIVO DECLARANTE', 
+			'CODIGO UGIPRESS', 
+			'TIPO DE INSTITUCION RECLAMO', 
+			'CODIGO ADMINISTRATIVO RECLAMO', 
+			'MEDIO PRESENTACION RECLAMO', 
+			'CODIGO UNICO REGISTRO RECLAMO', 
+			'TIPO DOCUMENTO USUARIO AFECTADO', 
+			'DNI', 
+			'RAZON SOCIAL', 
+			'NOMBRES APELLIDO PATERNO APELLIDO MATERNO', 
+			'DOCUMENTO IDENTIDAD QUIEN PRESENTA RECLAMO', 
+			'DNI QUIEN PRESENTA RECLAMO', 
+			'RAZON SOCIAL', 
+			'NOMBRES APELLIDO PATERNO APELLIDO MATERNO', 
+			'AUTORIZACION CORREO', 
+			'CORREO', 
+			'DOMICILIO', 
+			'CELULAR', 
+			'RECEPCION RECLAMO', 
+			'FECHA RECLAMO', 
+			'DETALLE RECLAMO', 
+			'TIPO DE SERVICIO', 
+			'COMPETENCIA RECLAMO', 
+			'CLASIFICACION 1', 
+			'CLASIFICACION 2', 
+			'CLASIFICACION 3', 
+			'ESTADO RECLAMO', 
+			'CODIGO RECLAMO PRIMIGENIO', 
+			'ETAPA RECLAMO', 
+			'TIPO DE ADMINISTRADO', 
+			'CODIGO DEL ADMINISTRADO', 
+			'RESULTADO RECLAMO', 
+			'MOTIVO CONCLUSION', 
+			'FECHA RESULTADO', 
+			'COMUNICACION DEL RESULTADO', 
+			'FECHA DE NOTIFICACION DE RESULTADO'
+		);
+		fputcsv($fp, (array) $cabecera, "|");
+
+		// Loop through file pointer and a line
+		foreach ($filas as $fila) {
+			fputcsv($fp, (array) $fila, "|");
+		}
+		fclose($fp);
+
+		$headers = ['Content-Type: text/csv'];
+		$fileName = time().'.csv';
+		return response()->download($filePath, $fileName, $headers);
+	}
+
+	//
 	public function tramasadop(Request $request)
 	{
 		$limite = $request->all();
@@ -535,28 +571,3 @@ class ReclamoController extends Controller {
 		}
 	}
 }
-
-/* TRAMAS - SQL
-CREATE OR REPLACE VIEW v_tramas AS
-SELECT a.id,
-	DATE_FORMAT(a.recibido_at, '%Y%m') AS col_a,
-    1 AS col_b,
-    12975 AS col_c,
-    12975 AS col_d,
-    CASE a.estado_id WHEN 3 THEN 3
-    	ELSE 1
-	END AS col_e,
-    CASE a.estado_id WHEN 3 THEN a.traslado_codigo
-    	ELSE '12975'
-	END AS col_f,
-    CASE a.medio_recepcion_id WHEN 1 OR 3 THEN a.medio_recepcion_id
-    	ELSE 2
-	END AS col_g,
-    CONCAT('12975-', a.hoja_nro) AS col_h,
-    CASE 
-    	b.dip_tp WHEN 'RUC' THEN 'RUC'
-    END AS col_i
-FROM reclamos a INNER JOIN users b
-	ON a.user_id = b.id
-ORDER BY a.recibido_at;
-*/
