@@ -460,6 +460,9 @@ class ReclamoController extends Controller {
 			if($param['tipo'] == '1') {
 				return $this->_tramaDeReclamos($param['periodo'], $param['desde'], $param['hasta']);
 			}
+			else if($param['tipo'] == '2') {
+				return $this->_tramaDeMedidasAdoptadas($param['periodo'], $param['desde'], $param['hasta']);
+			}
 		}
 	}
 
@@ -527,47 +530,67 @@ class ReclamoController extends Controller {
 		return response()->download($filePath, $fileName, $headers);
 	}
 
-	//
-	public function tramasadop(Request $request)
+	// trama de medidas adoptadas
+	private function _tramaDeMedidasAdoptadas($periodo, $desde, $hasta)
 	{
-		$limite = $request->all();
-		if (empty($limite)) {
-			return view('admin.reclamos.tramasadop');
-		}
-		else {
-			//$tramas = DB::select("SELECT * FROM v_tramas");
-			//return $request->desde;
-			//$desde = date($request->desde, 'Ym');
-			$fechaComoEntero = strtotime($request->desde);
-			$fechaComoEntero2 = strtotime($request->hasta);
-			$desde = date("Ym", $fechaComoEntero);
-			$hasta = date('Ym', $fechaComoEntero2);
+		$filas = DB::select("CALL TramaDeMedidasAdoptadas(?, ?, ?)", array($periodo, $desde, $hasta));
 			
-			$tramas = DB::table("v_adoptadas_test")
-			->where('col_a','>=',$desde)
-			->where('col_a','<=',$hasta)
-			->get();
+		// Open a file in write mode ('w')
+		$filePath = storage_path('app/trama_reclamos.csv');
+		$fp = fopen($filePath, 'w');
+			
+		// cabecera
+		$cabecera = array(
+			'id', 
+			'PERIODO DE DECLARACION', 
+			'TIPO DE ADMINISTRADO DECLARANTE', 
+			'CODIGO ADMINISTRATIVO DECLARANTE', 
+			'CODIGO UGIPRESS', 
+			'TIPO DE INSTITUCION RECLAMO', 
+			'CODIGO ADMINISTRATIVO RECLAMO', 
+			'MEDIO PRESENTACION RECLAMO', 
+			'CODIGO UNICO REGISTRO RECLAMO', 
+			'TIPO DOCUMENTO USUARIO AFECTADO', 
+			'DNI', 
+			'RAZON SOCIAL', 
+			'NOMBRES APELLIDO PATERNO APELLIDO MATERNO', 
+			'DOCUMENTO IDENTIDAD QUIEN PRESENTA RECLAMO', 
+			'DNI QUIEN PRESENTA RECLAMO', 
+			'RAZON SOCIAL', 
+			'NOMBRES APELLIDO PATERNO APELLIDO MATERNO', 
+			'AUTORIZACION CORREO', 
+			'CORREO', 
+			'DOMICILIO', 
+			'CELULAR', 
+			'RECEPCION RECLAMO', 
+			'FECHA RECLAMO', 
+			'DETALLE RECLAMO', 
+			'TIPO DE SERVICIO', 
+			'COMPETENCIA RECLAMO', 
+			'CLASIFICACION 1', 
+			'CLASIFICACION 2', 
+			'CLASIFICACION 3', 
+			'ESTADO RECLAMO', 
+			'CODIGO RECLAMO PRIMIGENIO', 
+			'ETAPA RECLAMO', 
+			'TIPO DE ADMINISTRADO', 
+			'CODIGO DEL ADMINISTRADO', 
+			'RESULTADO RECLAMO', 
+			'MOTIVO CONCLUSION', 
+			'FECHA RESULTADO', 
+			'COMUNICACION DEL RESULTADO', 
+			'FECHA DE NOTIFICACION DE RESULTADO'
+		);
+		fputcsv($fp, (array) $cabecera, "|");
 
-			//return $tramas;
-			// Open a file in write mode ('w')
-			$filePath = storage_path('app/tramas_adoptadas.csv');
-			$fp = fopen($filePath, 'w');
-			  
-			// cabecera
-			$cabecera = array(
-				'id', 'TIPO CODIGO RECLAMO', 'CODIGO UNICO REGISTRO', 'CODIGO MEDIDA ADOPTADA', 'DESCRIPCION MEDIDA ADOPTADA', 'NATURALEZA MEDIDA ADOPTADA', 'PROCESO MEDIDA ADOPTADA', 'FECHA INICIO', 'FECHA CULMINACION'
-			);
-			fputcsv($fp, (array) $cabecera, ";");
-
-			// Loop through file pointer and a line
-			foreach ($tramas as $trama) {
-				fputcsv($fp, (array) $trama, ";");
-			}
-			fclose($fp);
-
-			$headers = ['Content-Type: text/csv'];
-			$fileName = time().'.csv';
-			return response()->download($filePath, $fileName, $headers);
+		// Loop through file pointer and a line
+		foreach ($filas as $fila) {
+			fputcsv($fp, (array) $fila, "|");
 		}
+		fclose($fp);
+
+		$headers = ['Content-Type: text/csv'];
+		$fileName = time().'.csv';
+		return response()->download($filePath, $fileName, $headers);
 	}
 }
