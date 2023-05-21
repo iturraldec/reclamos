@@ -338,7 +338,7 @@
 $(document).ready(function () {
 	const DNI = "DNI";
 	const RUC = "RUC";
-	const APP_UTL = "{{ env('APP_URL') }}";
+	const APP_URL = "{{ env('APP_URL') }}";
 
 	// configuro la carga de archivos
 	$('#input-file').MultiFile({
@@ -349,9 +349,8 @@ $(document).ready(function () {
 			"denied": 'Tipo de archivo no valido: $ext!',
 			"duplicate": 'Archivo duplicado: \n$file!'
 		}
-  	});
+  });
 
-  	
 	// define la fecha/hora del reclamo
 	$('#input-recibido-at').datetimepicker({
 		timepicker: false,
@@ -372,11 +371,11 @@ $(document).ready(function () {
 	$("#input-recibido-at").change(function(){
 		$('#dip1').focus();
 	});
+
 	$("#suceso_at").change(function(){
 		$('#reclamo').focus();
 	});
 	
-
 	// al seleccionar el medio de recepcion del reclamo
 	$("#select-medio").change(function() {
 		if (this.value == 1) {
@@ -507,15 +506,15 @@ $(document).ready(function () {
 
 	// busqueda de dip del representante
 	$("#dip2").keyup(function() {
-      let tipoDocumento = $("#cbo_dip_tp2").val();
-      let valor = $("#dip2").val();
+		let tipoDocumento = $("#cbo_dip_tp2").val();
+		let valor = $("#dip2").val();
 
-      if (lib_isEmpty(valor)) {
-         lib_ShowMensaje("Error: Debe ingresar un numero de documento.", 'error');
-         return;
-      }
-      if (tipoDocumento == DNI) {
-         let url = 'https://apiperu.dev/api/dni/' + valor;
+		if (lib_isEmpty(valor)) {
+				lib_ShowMensaje("Error: Debe ingresar un numero de documento.", 'error');
+				return;
+		}
+		if (tipoDocumento == DNI) {
+				let url = 'https://apiperu.dev/api/dni/' + valor;
 
 			$.ajax({
 				url: url,
@@ -539,37 +538,35 @@ $(document).ready(function () {
 				error: function(data) {
 							//lib_ShowMensaje("Error del Servidor DNI/RUC.",'error');
 						}
-			})
-      }
-      else if (tipoDocumento == RUC) {
-         let url = 'https://apiperu.dev/api/ruc/' + valor;
+			})}
+		else if (tipoDocumento == RUC) {
+				let url = 'https://apiperu.dev/api/ruc/' + valor;
 
-			$.ajax({
-				url: url,
-				headers: {
-					"Authorization": "Bearer a3dae45c76f03dec347ed5e380387d3e31a8f9334720b481caf6d477e1a9e838"
-				},
-				dataType: 'json',
-				success: function(data) {
-								if(data.success){
-									$("#nombre2").val(data.data.nombre_o_razon_social);
-									$("#apellido-paterno2").val('');
-									$("#apellido-materno2").val('');
-									$("#dir2").val(data.data.direccion_completa);
-								}
-								else{
-									$("#nombre2").val('');
-									$("#apellido-paterno2").val('');
-									$("#apellido-materno2").val('');
-									//lib_ShowMensaje("RUC no valido.",'error');
-								}
-							},
-				error: function(data) {
-							//lib_ShowMensaje("Error del Servidor DNI/RUC.", 'error');
-						}
-			})
-      }
-   })
+		$.ajax({
+			url: url,
+			headers: {
+				"Authorization": "Bearer a3dae45c76f03dec347ed5e380387d3e31a8f9334720b481caf6d477e1a9e838"
+			},
+			dataType: 'json',
+			success: function(data) {
+							if(data.success){
+								$("#nombre2").val(data.data.nombre_o_razon_social);
+								$("#apellido-paterno2").val('');
+								$("#apellido-materno2").val('');
+								$("#dir2").val(data.data.direccion_completa);
+							}
+							else{
+								$("#nombre2").val('');
+								$("#apellido-paterno2").val('');
+								$("#apellido-materno2").val('');
+								//lib_ShowMensaje("RUC no valido.",'error');
+							}
+						},
+			error: function(data) {
+						//lib_ShowMensaje("Error del Servidor DNI/RUC.", 'error');
+					}})
+		}
+	})
 
 	// recibir correo de la clinica
 	$("#send_mail").on("click", function() {
@@ -688,6 +685,13 @@ $(document).ready(function () {
 			'recibido_at': $("#input-recibido-at").val(),
     }
 
+		let miSweet = Swal.mixin({
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			icon: 'info'
+		}).fire("Grabando datos...");
+
 		$.ajax({
 			headers: {
         		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -715,10 +719,12 @@ $(document).ready(function () {
 						dataType: 'json',
 						error: function(r) {
 									lib_ShowMensaje("Error inesperado en servidor!", 'error');
-								}
+						}
 					})
 				}
 				
+				miSweet.close();
+
 				alert("Su reclamo quedo registrado");
 				location.href = APP_URL;
 			}

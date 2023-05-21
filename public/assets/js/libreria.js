@@ -24,7 +24,7 @@ function lib_ShowMensaje(mensaje,tipo = 'toast') {
 			Swal.fire({
             title: 'Atención',
             text: mensaje
-          })
+         })
 			break;
    }
 }
