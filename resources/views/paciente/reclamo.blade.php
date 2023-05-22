@@ -725,8 +725,14 @@ $(document).ready(function () {
 				
 				miSweet.close();
 
-				alert("Su reclamo quedo registrado");
-				location.href = APP_URL;
+				Swal.fire({
+  				title: 'Atención',
+  				text: 'Su Reclamo fue guardado!',
+  				icon: 'success',
+  				confirmButtonColor: '#3085d6',
+				}).then((result) => {
+					location.href = APP_URL;
+				})
 			}
 		})
 	})
